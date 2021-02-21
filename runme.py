@@ -89,7 +89,7 @@ class MainWindow(QMainWindow):
     def compile_function(self):
         home_dir = os.getcwd()
         os.chdir(self.p2ce_fileNames) #This needs to be replaced with self.p2ce_fileNames later.
-        vbsp_path = os.getcwd(),"\\bin\\vbsp_original.exe"
+        vbsp_path = os.getcwd(),"\\bin\\vbsp.exe"
         vbsp_path = "".join(str(x) for x in vbsp_path)
         vbsp_args = os.getcwd(),"\\portal2"
         vbsp_args = "".join(str(x) for x in vbsp_args)
@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
         vproject_map = os.getcwd,"\\sdk_content\\maps"
         vproject_map = "".join(str(x) for x in vproject_map)
         vbsp_args = "".join(str(x) for x in vbsp_args)
-        compiler_path = home_dir,"\\compiler.py"
+        compiler_path = home_dir,"\\compiler.py" #This is unused.
         compiler_path = "".join(str(x) for x in compiler_path)
         self.ui.compile_button.setDisabled(True)
         subprocess.call([vbsp_path, "-game", vbsp_args, vbsp_map], shell=True, cwd=None)
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
         vvis_path = "".join(str(x) for x in vvis_path)
         bsp_map = vbsp_map[:-4]
         subprocess.call([vvis_path, "-game", vbsp_args, bsp_map], shell=True, cwd=None)
-        vrad_path = os.getcwd(),"\\bin\\vrad_original.exe"
+        vrad_path = os.getcwd(),"\\bin\\vrad.exe"
         vrad_path = "".join(str(x) for x in vrad_path)
         global compile_radial_option
         global vrad_option
