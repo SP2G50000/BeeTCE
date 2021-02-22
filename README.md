@@ -1,6 +1,8 @@
 # BeeTCE
 BeeTCE (**Bee**mod **T**o **C**ommunity **E**dition) is a tool to export Puzzlemaker Maps to Portal 2: Community Edition. This tool is not ready for end user use.
 
+![image](https://i.imgur.com/zcAh4GJ.png)
+
 ## Using the application.
 Download both Python scripts and put them in a folder together.
 
