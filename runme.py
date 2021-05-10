@@ -4,7 +4,7 @@ from PySide6 import QtWidgets
 from PySide6.QtWidgets import QApplication, QFileDialog, QMainWindow
 from PySide6.QtCore import QFile, QIODevice
 from ui_form import Ui_MainWindow
-compile_radial_option = 0
+compile_radial_option = 1
 vrad_option = "-fast"
 #Sets up the configuration file.
 import configparser
@@ -52,9 +52,18 @@ class MainWindow(QMainWindow):
         global p2_config
         global p2ce_config
         global vmf_config
+        global compile_radial_option
         self.ui.p2_lineEdit.setText(p2_config)
         self.ui.p2ce_lineEdit.setText(p2ce_config)
         self.ui.vmf_lineEdit.setText(vmf_config)
+        if not self.ui.p2_lineEdit == "":
+            self.p2_picked = 1
+        if not self.ui.p2ce_lineEdit == "":
+            self.p2ce_picked = 1
+            self.p2ce_fileNames = p2ce_config
+        if not self.ui.vmf_lineEdit == "":
+            self.vmf_picked = 1
+            self.vmf_fileNames = vmf_config
     
     @QtCore.Slot() #This is where most of the UI functions go.
     def p2_browse_function(self): #This function is currently unused.
@@ -124,13 +133,19 @@ class MainWindow(QMainWindow):
                 if self.vmf_picked == 1:
                     if self.radial_button_picked == 1:
                         self.ui.compile_button.setDisabled(False)
-#This is where the program calls the P2:CE Compiler. As P2:CE is not out yet, it currently calls the Portal 2 Compiler.
+#This is where the program calls the P2:CE Compiler.
     def compile_function(self):
         home_dir = os.getcwd()
-        os.chdir(self.p2ce_fileNames) #This needs to be replaced with self.p2ce_fileNames later.
-        vbsp_path = os.getcwd(),"\\bin\\vbsp.exe"
+        os.chdir(self.p2ce_fileNames)
+
+        #Modify VMF
+        #This is where the VMF will be modified by arguments such as Adhesion Gel swapping.
+        #As of coding however, this is currently not implemented.
+
+        #VBSP
+        vbsp_path = os.getcwd(),"\\bin\\win64\\vbsp.exe"
         vbsp_path = "".join(str(x) for x in vbsp_path)
-        vbsp_args = os.getcwd(),"\\portal2"
+        vbsp_args = os.getcwd(),"\\p2ce"
         vbsp_args = "".join(str(x) for x in vbsp_args)
         vbsp_map = self.ui.vmf_lineEdit.text() #This is where the compiler finds the VMF.
         vproject_map = os.getcwd,"\\sdk_content\\maps"
@@ -140,12 +155,22 @@ class MainWindow(QMainWindow):
         compiler_path = "".join(str(x) for x in compiler_path)
         self.ui.compile_button.setDisabled(True)
         subprocess.call([vbsp_path, "-game", vbsp_args, vbsp_map], shell=True, cwd=None)
-        print("***\nVBSP has finished! Loading VVIS...\n***")
-        vvis_path = os.getcwd(),"\\bin\\vvis.exe"
-        vvis_path = "".join(str(x) for x in vvis_path)
+        print("***\nVBSP has finished! Loading Post Compiler...\n***")
+
+        #Post Compiler (Beemod relies on a lot of post compiler entities, this is needed. Good thing it's included in p2ce.)
         bsp_map = vbsp_map[:-4]
+        postc_path = os.getcwd(),"\\bin\\win64\\postcompiler\\postcompiler.exe"
+        postc_path = "".join(str(x) for x in postc_path)
+        subprocess.call([postc_path, "--propcombine", vbsp_map], shell=True, cwd=None)
+        print("***\nPost Compiler has finished! Loading VVIS...\n***")
+
+        #VVIS
+        vvis_path = os.getcwd(),"\\bin\\win64\\vvis.exe"
+        vvis_path = "".join(str(x) for x in vvis_path)
         subprocess.call([vvis_path, "-game", vbsp_args, bsp_map], shell=True, cwd=None)
-        vrad_path = os.getcwd(),"\\bin\\vrad.exe"
+
+        #VRAD
+        vrad_path = os.getcwd(),"\\bin\\win64\\vrad.exe"
         vrad_path = "".join(str(x) for x in vrad_path)
         global compile_radial_option
         global vrad_option
@@ -163,6 +188,9 @@ class MainWindow(QMainWindow):
         else:
             print("***\nVVIS has finished!\nThe fullbright option was selected. Skipping VRAD...\n***")
         print("Map has been compiled!")
+
+        #Copy to map dir.
+        #TODO: Add this.
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
