@@ -1,5 +1,9 @@
 # BeeTCE
-BeeTCE (**Bee**mod **T**o **C**ommunity **E**dition) is a tool to export Puzzlemaker Maps to Portal 2: Community Edition. This tool is not ready for end user use.
+BeeTCE (**Bee**mod **T**o **C**ommunity **E**dition) is a tool to take Portal 2 Puzzlemaker Maps and compile them Portal 2: Community Edition, so they take full advantage of P2CE's upgraded engine.
+
+Currently both this tool and Portal 2: Community Edition are in their infancy, as such, this tool is not ready for end-user use.
+
+Proper instructions for using this tool will be provided at a later date.
 
 ![image](https://i.imgur.com/zcAh4GJ.png)
 
